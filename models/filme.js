@@ -1,4 +1,5 @@
-const tbFilme = require('../rotas/filmes/tabelaFilmes')
+const tbFilme = require('../rotas/filmes/tabelaFilmes');
+const DadosInvalidos = require('./erros/DadosInvalidos');
 
 class Filme {
     constructor({id, nome, genero, resumo, lancamento, dataCriacao, dataAtualizacao, versao}){
@@ -52,7 +53,7 @@ class Filme {
         }
         )
         if(att.length<1){
-            throw new Error('Nenhum dado fornecido.')
+            throw new DadosInvalidos()
         }
 
         await tbFilme.atualizar(this.id, att);
@@ -67,7 +68,7 @@ class Filme {
         campos.forEach((campo)=>{
             const valor = this[campo];
             if(valor== null || valor == undefined || valor==""){
-                throw new Error("Por favor, insira todos os dados.")
+                throw new DadosInvalidos()
             }
     })
 }

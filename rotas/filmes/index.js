@@ -2,7 +2,7 @@ const roteador = require('express').Router()
 const TabelaFornecedor = require('./tabelaFilmes')
 const Filme = require('../../models/filme')
 
-roteador.get('/', async (requisicao, resposta) => {
+roteador.get('/', async (requisicao, resposta, proximo) => {
     const resultados = await TabelaFornecedor.listar()
     resposta.status(200);
     resposta.send(
@@ -10,7 +10,7 @@ roteador.get('/', async (requisicao, resposta) => {
     )
 })
 
-roteador.post('/', async (req, resp)=>{
+roteador.post('/', async (req, resp, proximo)=>{
 try{
     const dadosRecebidos = req.body;
     const filme = new Filme(dadosRecebidos);
@@ -19,14 +19,11 @@ try{
     resp.status(201);
     resp.send(JSON.stringify(filme));
 }catch(erro){
-    resp.send(
-        JSON.stringify(
-        {mensagem : erro.message}
-    ));
-}
+    proximo(erro);
+    }
 })
 
-roteador.get('/:id', async (req, res)=>{
+roteador.get('/:id', async (req, res, proximo)=>{
     try{
         const idF = req.params.id;
         const filme = new Filme({id: idF});
@@ -35,14 +32,11 @@ roteador.get('/:id', async (req, res)=>{
         res.status(200);
         res.send(JSON.stringify(filme));
     }catch(erro){
-        res.send(
-            JSON.stringify(
-            {mensagem : erro.message}
-        ));
-    }
+        proximo(erro);
+        }
 })
 
-roteador.put('/:id', async(req, res)=>{
+roteador.put('/:id', async(req, res, proximo)=>{
 try{
     const id = req.params.id;
     const dados = req.body;
@@ -53,13 +47,11 @@ try{
     res.status(204);
     res.end();
 }catch(erro){
-    res.send(JSON.stringify({
-        mensagem : erro.message
-    }))
+proximo(erro);
 }
 })
 
-roteador.delete('/:id', async (req, res)=>{
+roteador.delete('/:id', async (req, res, proximo)=>{
     try{
         const id = req.params.id;
         const filme = new Filme({id : id});
@@ -68,10 +60,8 @@ roteador.delete('/:id', async (req, res)=>{
         res.status(204);
         res.end();
     }catch(erro){
-        res.send(JSON.stringify({
-            mensagem : erro.message
-        }))
-    }
+        proximo(erro);
+        }
 })
 
 module.exports = roteador;

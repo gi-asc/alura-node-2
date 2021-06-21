@@ -1,3 +1,4 @@
+const NaoEncontrado = require('../../models/erros/NaoEncontrado');
 const Modelo = require('./modeloFilmes')
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
             }
         })
         if(!encontrado){
-            throw new Error('Filme não encontrado');
+            throw new NaoEncontrado();
         }
 
         return encontrado;
