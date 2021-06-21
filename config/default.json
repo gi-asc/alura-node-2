@@ -1,0 +1,11 @@
+{
+    "mysql": {
+        "db": "filmes-favoritos",
+        "user": "root",
+        "senha": "",
+        "host": "127.0.0.1"
+    },
+    "api": {
+        "porta": 3000
+    }
+}
