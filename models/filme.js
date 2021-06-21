@@ -13,6 +13,7 @@ class Filme {
     }
 
     async criar(){
+        await this.validar();
         const result = await tbFilme.inserir({
             nome : this.nome,
             genero : this.genero,
@@ -56,6 +57,20 @@ class Filme {
 
         await tbFilme.atualizar(this.id, att);
     }
+
+    async remover(){
+        return await tbFilme.remover(this.id);
+    }
+
+    async validar(){
+        const campos = ['nome', 'genero', 'resumo', 'lancamento'];
+        campos.forEach((campo)=>{
+            const valor = this[campo];
+            if(valor== null || valor == undefined || valor==""){
+                throw new Error("Por favor, insira todos os dados.")
+            }
+    })
+}
 }
 
 module.exports = Filme;

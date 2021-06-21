@@ -10,11 +10,18 @@ roteador.get('/', async (requisicao, resposta) => {
 })
 
 roteador.post('/', async (req, resp)=>{
+try{
     const dadosRecebidos = req.body;
     const filme = new Filme(dadosRecebidos);
 
     await filme.criar();
     resp.send(JSON.stringify(filme));
+}catch(erro){
+    resp.send(
+        JSON.stringify(
+        {mensagem : erro.message}
+    ));
+}
 })
 
 roteador.get('/:id', async (req, res)=>{
@@ -46,6 +53,20 @@ try{
         mensagem : erro.message
     }))
 }
+})
+
+roteador.delete('/:id', async (req, res)=>{
+    try{
+        const id = req.params.id;
+        const filme = new Filme({id : id});
+        await filme.procurar();
+        filme.remover();
+        res.end();
+    }catch(erro){
+        res.send(JSON.stringify({
+            mensagem : erro.message
+        }))
+    }
 })
 
 module.exports = roteador;
