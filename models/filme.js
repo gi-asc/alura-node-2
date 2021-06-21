@@ -25,6 +25,19 @@ class Filme {
         this.dataCriacao = result.dataCriacao;
         this.versao = result.versao;
     }
+
+    async procurar(){
+        const encontrado = await tbFilme.buscar(this.id);
+
+        this.nome = encontrado.nome;
+        this.genero = encontrado.genero;
+        this.resumo = encontrado.resumo;
+        this.lancamento = encontrado.lancamento;
+        this.dataAtualizacao = encontrado.dataCriacao;
+        this.dataCriacao = encontrado.dataCriacao;
+        this.versao = encontrado.versao;
+
+    }
 }
 
 module.exports = Filme;

@@ -17,4 +17,19 @@ roteador.post('/', async (req, resp)=>{
     resp.send(JSON.stringify(filme));
 })
 
+roteador.get('/:id', async (req, res)=>{
+    try{
+        const idF = req.params.id;
+        const filme = new Filme({id: idF});
+    
+        await filme.procurar();
+        res.send(JSON.stringify(filme));
+    }catch(erro){
+        res.send(
+            JSON.stringify(
+            {mensagem : erro.message}
+        ));
+    }
+})
+
 module.exports = roteador;
