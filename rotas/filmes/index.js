@@ -32,4 +32,20 @@ roteador.get('/:id', async (req, res)=>{
     }
 })
 
+roteador.put('/:id', async(req, res)=>{
+try{
+    const id = req.params.id;
+    const dados = req.body;
+
+    const completo = Object.assign({}, dados, {id : id});
+    const filme = new Filme(completo);
+    await filme.atualiza();
+    res.end();
+}catch(erro){
+    res.send(JSON.stringify({
+        mensagem : erro.message
+    }))
+}
+})
+
 module.exports = roteador;

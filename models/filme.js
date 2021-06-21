@@ -38,6 +38,24 @@ class Filme {
         this.versao = encontrado.versao;
 
     }
+
+    async atualiza(){
+        await tbFilme.buscar(this.id);
+        const colunasAtt = ['nome', 'genero', 'resumo', 'lancamento'];
+        const att = {};
+        colunasAtt.forEach((campo)=>{
+            const valor = this[campo];
+            if(valor!==null && valor!== undefined && valor!==""){
+                att[campo] = valor;
+            }
+        }
+        )
+        if(att.length<1){
+            throw new Error('Nenhum dado fornecido.')
+        }
+
+        await tbFilme.atualizar(this.id, att);
+    }
 }
 
 module.exports = Filme;

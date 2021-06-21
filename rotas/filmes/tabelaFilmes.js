@@ -20,5 +20,14 @@ module.exports = {
         }
 
         return encontrado;
+    },
+
+    async atualizar(id, dados){
+  return Modelo.update(dados,
+    {
+        where: {
+            id : id
+        }
+    })
     }
 }
