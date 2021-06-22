@@ -1,12 +1,16 @@
 const roteador = require('express').Router()
-const TabelaFornecedor = require('./tabelaFilmes')
+const TabelaFilmes = require('./tabelaFilmes')
 const Filme = require('../../models/filme')
+const SerializadorFilme = require('../../models/serializador').SerializadorFilme;
 
 roteador.get('/', async (requisicao, resposta, proximo) => {
-    const resultados = await TabelaFornecedor.listar()
+    const resultados = await TabelaFilmes.listar()
     resposta.status(200);
+
+    const serializadorFilme = new SerializadorFilme(resposta.getHeader('Content-type'))
+
     resposta.send(
-        JSON.stringify(resultados)
+        serializadorFilme.serializar(resultados)
     )
 })
 
@@ -14,10 +18,11 @@ roteador.post('/', async (req, resp, proximo)=>{
 try{
     const dadosRecebidos = req.body;
     const filme = new Filme(dadosRecebidos);
+    const serializadorFilme = new SerializadorFilme(resp.getHeader('Content-type'))
 
     await filme.criar();
     resp.status(201);
-    resp.send(JSON.stringify(filme));
+    resp.send(serializadorFilme.serializar(filme));
 }catch(erro){
     proximo(erro);
     }
@@ -26,11 +31,13 @@ try{
 roteador.get('/:id', async (req, res, proximo)=>{
     try{
         const idF = req.params.id;
-        const filme = new Filme({id: idF});
-    
+        const filme = new Filme({id: idF});    
         await filme.procurar();
         res.status(200);
-        res.send(JSON.stringify(filme));
+
+        const serializadorFilme = new SerializadorFilme(res.getHeader('Content-Type'))
+
+        res.send(serializadorFilme.serializar(filme));
     }catch(erro){
         proximo(erro);
         }

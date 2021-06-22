@@ -3,7 +3,7 @@ const Modelo = require('./modeloFilmes')
 
 module.exports = {
     listar () {
-        return Modelo.findAll()
+        return Modelo.findAll({raw : true})
     },
 
     inserir(filme) {

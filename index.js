@@ -3,8 +3,25 @@ const app = express()
 const conn = require('./models/connection');
 const bodyParser = require('body-parser')
 const config = require('config')
+const formatos = require('./models/serializador').formatosAceitos;
 
 app.use(bodyParser.json())
+app.use((req, res, proximo)=>{
+    let formato = req.header('Accept');
+
+    if(formato === "*/*"){
+        formato = 'application/json';
+    }
+
+    if(formatos.indexOf(formato) === -1){
+        res.status(406);
+        res.end();
+        return;
+    }
+
+    res.setHeader('Content-type', formato);
+    proximo();
+})
 
 const roteador = require('./rotas/filmes');
 const NaoEncontrado = require('./models/erros/NaoEncontrado');
